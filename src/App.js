@@ -1,26 +1,30 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends React.Component {
+  constructor() {
+    super();
+    this.state = { 
+      loading: false,
+      data: {} 
+    };
+  }
+  async componentDidMount(){
+    this.setState({loading: true})
+    const response = await fetch(`https://swapi.dev/api/people/1`);
+    const json = await response.json();
+    this.setState({loading:false,
+       data: json });
+  }
+
+    render(){
+      const name = this.state.loading?<h1>it is loading</h1>:<h1>{this.state.data.name}</h1>
+      return (
+        <div className="App">
+          {name}
+        </div>
+      );
+  }
 }
 
 export default App;
